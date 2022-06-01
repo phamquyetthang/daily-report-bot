@@ -1,0 +1,9 @@
+<div class="app-auth">
+  <fieldset class="app-auth__form">
+      <h2>{{(authType === 'login' ? 'Login' : 'Sign Up') | uppercase}}</h2>
+      <input type="email" placeholder="Email" />
+      <input type="password" placeholder="Password" />
+      <button>{{(authType === 'login' ? 'Login' : 'Sign Up') | uppercase}}</button>
+        <a routerLink="?type={{authType === 'login' ? 'signup' : 'login'}}">go to login</a>
+  </fieldset>
+</div>

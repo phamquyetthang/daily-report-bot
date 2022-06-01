@@ -1,0 +1,31 @@
+.app-auth{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 90vh;
+    overflow: hidden;
+
+    &__form{
+        display: flex;
+        flex-direction: column;
+        border: 1px solid gray;
+        padding: 1em;
+        min-width: 28vw;
+        border-radius: 8px;
+
+        h2{
+            margin: 0;
+            text-align: center;
+        }
+        
+        input{
+            padding: 8px;
+            margin: 8px 0;
+        }
+
+        button{
+            padding: 8px;
+            margin: 8px 0;
+        }
+    }
+}
