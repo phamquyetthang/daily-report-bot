@@ -9,11 +9,13 @@ import { HttpClientModule } from '@angular/common/http';
 import { CoreModule } from './services/index.module';
 import { ReportComponent } from './screens/report/report.component';
 import { AuthGuard } from './screens/auth/auth-guard.service';
+import { HeaderComponent } from './components/header/header.component';
 @NgModule({
   declarations: [
     AppComponent,
     AuthComponent,
-    ReportComponent
+    ReportComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,
