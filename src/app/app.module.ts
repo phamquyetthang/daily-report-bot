@@ -12,8 +12,9 @@ import { AuthGuard } from './screens/auth/auth-guard.service';
 import { HeaderComponent } from './components/header/header.component';
 import { AuthInterceptor } from './helpers/auth.Interceptor';
 import { ErrorInterceptor } from './helpers/error.Interceptor';
+import { ReportFormComponent } from './components/report-form/report-form.component';
 @NgModule({
-  declarations: [AppComponent, AuthComponent, ReportComponent, HeaderComponent],
+  declarations: [AppComponent, AuthComponent, ReportComponent, HeaderComponent, ReportFormComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

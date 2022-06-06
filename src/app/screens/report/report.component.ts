@@ -2,8 +2,28 @@ import { Component, OnInit } from '@angular/core';
 import * as moment from 'moment';
 import { ReportService } from 'src/app/services/report.service';
 import { UserService } from 'src/app/services/user.service';
-import IReport, { IProjectIssue } from 'src/app/utils/types/report';
+import IReport, {
+  IProjectIssue,
+  IReportForm,
+} from 'src/app/utils/types/report';
 import { IUser } from 'src/app/utils/types/user';
+const initReportEdit = {
+  yesterday: [
+    {
+      project: '',
+      contain: '',
+    },
+  ],
+
+  today: [
+    {
+      project: '',
+      contain: '',
+    },
+  ],
+
+  _id: '',
+};
 
 @Component({
   selector: 'app-report',
@@ -15,6 +35,10 @@ export class ReportComponent implements OnInit {
 
   reports: IReport[] = [];
   isOpenAddEdit: boolean = false;
+
+  reportEdit: IReportForm = {
+    ...initReportEdit,
+  };
   editId: string = '';
 
   constructor(
@@ -71,9 +95,12 @@ export class ReportComponent implements OnInit {
     this.reportService.getReportById(id);
   }
 
-  toggleModal(id?: string) {
-    console.log("🚀 ~ file: report.component.ts ~ line 75 ~ ReportComponent ~ toggleModal ~ id", id)
+  toggleModal(report?: IReport) {
     this.isOpenAddEdit = !this.isOpenAddEdit;
-    this.editId = id || '';
+    if (report) {
+      this.reportEdit = report as IReportForm;
+    } else {
+      this.reportEdit = { ...initReportEdit };
+    }
   }
 }
