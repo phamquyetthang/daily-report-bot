@@ -1,4 +1,4 @@
-interface IProjectIssue {
+export interface IProjectIssue {
   project: string;
   contain: string;
 }

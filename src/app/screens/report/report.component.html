@@ -1,19 +1,220 @@
 <div class="border-b border-gray-200 dark:border-gray-700 mt-6">
-    <ul class="flex flex-wrap -mb-px text-sm font-medium text-center text-gray-500 dark:text-gray-400">
-        <li class="mr-2" *ngFor="let user of users">
-            <button *ngIf=" user._id === selectedId; else elseBlock" (click)="onSelect(user._id)"
-                class="inline-flex p-4 text-blue-600 rounded-t-lg border-b-2 border-blue-600 items-center active dark:text-blue-500 dark:border-blue-500 group"
-                aria-current="page">
-                <img class="w-8 h-8 rounded-full" [src]="user.avt" alt="Avatar" /> <span
-                    class="ml-2">{{user.name}}</span>
+  <ul
+    class="flex flex-wrap -mb-px text-sm font-medium text-center text-gray-500 dark:text-gray-400"
+  >
+    <li class="mr-2" *ngFor="let user of users">
+      <button
+        *ngIf="user._id === selectedId; else elseBlock"
+        (click)="onSelect(user._id)"
+        class="inline-flex p-4 text-blue-600 rounded-t-lg border-b-2 border-blue-600 items-center active dark:text-blue-500 dark:border-blue-500 group"
+        aria-current="page"
+      >
+        <img class="w-8 h-8 rounded-full" [src]="user.avt" alt="Avatar" />
+        <span class="ml-2">{{ user.name }}</span>
+      </button>
+      <ng-template #elseBlock>
+        <button
+          (click)="onSelect(user._id)"
+          class="inline-flex p-4 rounded-t-lg border-b-2 border-transparent items-center hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group"
+        >
+          <img class="w-8 h-8 rounded-full" [src]="user.avt" alt="Avatar" />
+          <span class="ml-2">{{ user.name }}</span>
+        </button>
+      </ng-template>
+    </li>
+  </ul>
+
+  <div class="bg-gray-100 text-gray-700 font-sans quicksand pt-2">
+    <div class="w-screen overflow-auto whitespace-no-wrap text-center mt-2">
+      <button
+        class="inline-block border border-teal-500 text-teal-500 rounded px-3 py-1 mr-4"
+        *ngFor="let day of days()"
+      >
+        {{ day }}
+      </button>
+    </div>
+    <div class="w-screen text-center mt-2">
+      <button
+        class="bg-pink-500 text-white active:bg-pink-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+        type="button"
+        (click)="toggleModal()"
+      >
+        Create daily report
+      </button>
+    </div>
+    <div
+      class="p-16 pt-0 grid md:grid-cols-2 sm:grid-cols-1 lg:grid-cols-3 m-5 mb-10"
+    >
+      <div *ngFor="let report of reports">
+        <div
+          *ngIf="getDateType(report.date) as variable"
+          class="bg-white hover:bg-green-100 border border-gray-200 p-3 m-1 relative"
+          [ngClass]="{
+            'border-blue-500': variable === 1,
+            'border-yellow-500': variable === 2
+          }"
+        >
+          <i *ngIf="variable === 2" class="schedule-tag">schedule</i>
+
+          <div class="m-2 text-justify text-sm">
+            <p class="text-right text-xs">{{ report.date | date }}</p>
+            <h2 class="font-bold text-lg h-2 mb-6">Done Yesterday</h2>
+            <div
+              class="text-xs mb-1"
+              *ngFor="let yesterday of report.yesterday"
+            >
+              <h3 class="font-bold text-sm">{{ yesterday.project }}:</h3>
+              <p>{{ yesterday.contain }}</p>
+            </div>
+            <p *ngIf="report.re_open_bug">
+              🐞 <i><b>Re-open bug</b></i
+              >: {{ report.re_open_bug }}
+              <br />
+              <span> <i>Reason</i>: {{ report.reason_bug }}</span>
+            </p>
+
+            <p *ngIf="report.highlight_yesterday">
+              ⚡ <i><b>Highlight :</b></i> {{ report.highlight_yesterday }}
+            </p>
+
+            <h2 class="font-bold text-lg h-2 mb-6 mt-8">Plan Today</h2>
+            <div class="text-xs" *ngFor="let today of report.today">
+              <h3 class="font-bold text-sm">{{ today.project }}:</h3>
+              <p>{{ today.contain }}</p>
+            </div>
+
+            <p *ngIf="report.highlight_today">
+              ⚡ <i><b>Highlight :</b></i> {{ report.highlight_today }}
+            </p>
+          </div>
+          <div class="w-full text-right mt-4" *ngIf="variable !== 3">
+            <button
+              class="text-green-400 uppercase font-bold text-sm"
+              (click)="toggleModal(report._id)"
+            >
+              Edit
             </button>
-            <ng-template #elseBlock>
-                <button (click)="onSelect(user._id)"
-                    class="inline-flex p-4 rounded-t-lg border-b-2 border-transparent items-center hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group">
-                    <img class="w-8 h-8 rounded-full" [src]="user.avt" alt="Avatar" /> <span
-                        class="ml-2">{{user.name}}</span>
-                </button>
-            </ng-template>
-        </li>
-    </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+<div
+  *ngIf="isOpenAddEdit"
+  class="overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center flex"
+>
+  <div class="relative w-auto my-6 mx-auto">
+    <div
+      class="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none"
+    >
+      <div
+        class="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t"
+      >
+        <h3 class="text-3xl font-semibold">
+          {{ editId ? "Edit Report" : "Create Report" }}
+        </h3>
+      </div>
+      <div class="w-[70vw] p-6">
+        <div class="border-b border-solid border-slate-200 mb-6">
+          <h3 class="text-xl font-semibold mb-4">Done yesterday</h3>
+          <div class=" border-dashed border-b border-slate-200 pb-2 mb-3 grid gap-4 grid-cols-3">
+            <div class="">
+              <label
+                class="text-sm font-medium text-gray-900 dark:text-gray-300"
+                >Project:</label
+              >
+              <input
+                type="text"
+                class="p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              />
+            </div>
+            <div class="col-span-2">
+              <label
+                class="mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                >Content:</label
+              >
+              <textarea
+                type="text"
+                class="w-full p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              ></textarea>
+            </div>
+          </div>
+          <div class=" border-dashed border-b border-slate-200 pb-2 mb-3 grid gap-4 grid-cols-3">
+            <div class="">
+              <label
+                class="text-sm font-medium text-gray-900 dark:text-gray-300"
+                >Project:</label
+              >
+              <input
+                type="text"
+                class="p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              />
+            </div>
+            <div class="col-span-2">
+              <label
+                class="mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                >Content:</label
+              >
+              <textarea
+                type="text"
+                class="w-full p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              ></textarea>
+            </div>
+          </div>
+          <button class="bg-slate-300 py-1 px-2 mb-2 rounded">
+            <i>Add project</i>
+          </button>
+          <div class="mb-3">
+            <label
+              class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+              >Content:</label
+            >
+            <textarea
+              type="text"
+              class="block w-full p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            ></textarea>
+          </div>
+          <div class="mb-3">
+            <label
+              class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+              >Content:</label
+            >
+            <textarea
+              type="text"
+              class="block w-full p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            ></textarea>
+          </div>
+        </div>
+        <div class="border-b border-solid border-slate-200 mb-6">
+          <h3 class="text-xl font-semibold mb-4">Impediment</h3>
+          <div class="mb-3">
+            <textarea
+              type="text"
+              class="block w-full p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            ></textarea>
+          </div>
+        </div>
+      </div>
+      <div
+        class="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b"
+      >
+        <button
+          class="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+          type="button"
+          (click)="toggleModal()"
+        >
+          Close
+        </button>
+        <button
+          class="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+          type="button"
+          (click)="toggleModal()"
+        >
+          Save
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="isOpenAddEdit" class="opacity-25 fixed inset-0 z-40 bg-black"></div>

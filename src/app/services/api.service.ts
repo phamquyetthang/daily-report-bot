@@ -34,10 +34,12 @@ export class ApiService {
 
   // private headers =
 
-  get(path: string, params: HttpParams = new HttpParams()): Observable<any> {
-    console.log(this.headers);
+  get(path: string, params?: any): Observable<any> {
+    const paramsConvert = new HttpParams({
+     ...(params &&{ fromObject: params,})
+    });
     return this.http
-      .get(`${environment.apiUrl}${path}`, { headers: this.headers, params })
+      .get(`${environment.apiUrl}${path}`, { headers: this.headers, params: paramsConvert })
       .pipe(catchError(this.formatErrors));
   }
 

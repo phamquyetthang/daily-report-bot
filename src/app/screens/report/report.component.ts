@@ -1,13 +1,8 @@
-import {
-  AfterViewChecked,
-  ChangeDetectorRef,
-  Component,
-  OnInit,
-} from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import * as moment from 'moment';
 import { ReportService } from 'src/app/services/report.service';
 import { UserService } from 'src/app/services/user.service';
-import IReport from 'src/app/utils/types/report';
+import IReport, { IProjectIssue } from 'src/app/utils/types/report';
 import { IUser } from 'src/app/utils/types/user';
 
 @Component({
@@ -17,13 +12,26 @@ import { IUser } from 'src/app/utils/types/user';
 })
 export class ReportComponent implements OnInit {
   selectedId: string = '';
-  constructor(private userService: UserService, private reportService: ReportService) {
+
+  reports: IReport[] = [];
+  isOpenAddEdit: boolean = false;
+  editId: string = '';
+
+  constructor(
+    private userService: UserService,
+    private reportService: ReportService
+  ) {
     this.selectedId = userService.current._id;
   }
 
   ngOnInit(): void {
     this.userService.isLoginId.subscribe((id: string) => {
       this.selectedId = id;
+      this.reportService.getReportById();
+    });
+
+    this.reportService.reports.asObservable().subscribe((data) => {
+      this.reports = data;
     });
   }
 
@@ -33,14 +41,39 @@ export class ReportComponent implements OnInit {
     return [{ ...me, name: 'My reports' }, ...others];
   }
 
-  get reports(): IReport[]{
-   return this.reportService.getReportById(this.selectedId).pipe().subscribe().unsubscribe()
+  projectReport(report: IReport): IProjectIssue[] {
+    return report.yesterday;
   }
+
+  getDateType(date: Date): 1 | 2 | 3 {
+    if (moment().isSame(date, 'D')) {
+      return 1;
+    }
+    if (moment().isBefore(date)) {
+      return 2;
+    }
+    return 3;
+  }
+
+  days() {
+    const weekStart = moment().startOf('week');
+
+    const days = [];
+    for (let i = 0; i <= 6; i++) {
+      days.push(moment(weekStart).add(i, 'days').format('ddd D'));
+    }
+
+    return days;
+  }
+
   onSelect(id: string) {
-    console.log(
-      '🚀 ~ file: report.component.ts ~ line 37 ~ ReportComponent ~ onSelect ~ id',
-      id
-    );
     this.selectedId = id;
+    this.reportService.getReportById(id);
+  }
+
+  toggleModal(id?: string) {
+    console.log("🚀 ~ file: report.component.ts ~ line 75 ~ ReportComponent ~ toggleModal ~ id", id)
+    this.isOpenAddEdit = !this.isOpenAddEdit;
+    this.editId = id || '';
   }
 }
