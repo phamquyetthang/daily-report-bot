@@ -13,6 +13,6 @@ export class AuthService {
 
   signupService(email: string, password: string):Observable<{token: string}> {
     return this.apiService
-      .post('/auth/signup', { email, password }) as Observable<{token: string}>;
+      .post('/auth/register', { email, password }) as Observable<{token: string}>;
   }
 }

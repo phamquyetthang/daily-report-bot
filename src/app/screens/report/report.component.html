@@ -1,1 +1,19 @@
-<p>report works!</p>
+<div class="border-b border-gray-200 dark:border-gray-700 mt-6">
+    <ul class="flex flex-wrap -mb-px text-sm font-medium text-center text-gray-500 dark:text-gray-400">
+        <li class="mr-2" *ngFor="let user of users">
+            <button *ngIf=" user._id === selectedId; else elseBlock" (click)="onSelect(user._id)"
+                class="inline-flex p-4 text-blue-600 rounded-t-lg border-b-2 border-blue-600 items-center active dark:text-blue-500 dark:border-blue-500 group"
+                aria-current="page">
+                <img class="w-8 h-8 rounded-full" [src]="user.avt" alt="Avatar" /> <span
+                    class="ml-2">{{user.name}}</span>
+            </button>
+            <ng-template #elseBlock>
+                <button (click)="onSelect(user._id)"
+                    class="inline-flex p-4 rounded-t-lg border-b-2 border-transparent items-center hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group">
+                    <img class="w-8 h-8 rounded-full" [src]="user.avt" alt="Avatar" /> <span
+                        class="ml-2">{{user.name}}</span>
+                </button>
+            </ng-template>
+        </li>
+    </ul>
+</div>

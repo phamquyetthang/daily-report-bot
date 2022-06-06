@@ -15,7 +15,9 @@ export class AuthComponent implements OnInit {
     private router: Router,
     private authService: AuthService,
     private jwtService: JwtService
-  ) {}
+  ) {
+  }
+
   get authType(): IAuthType {
     let type: IAuthType = 'login';
     this.route.params.subscribe((params) => {
@@ -23,24 +25,34 @@ export class AuthComponent implements OnInit {
     });
     return type;
   }
-  ngOnInit(): void {}
+
+  ngOnInit(): void {
+    if(this.jwtService.getToken()){
+      this.router.navigate(['']);
+    }
+  }
   email: string = '';
   password: string = '';
+
+  setAuthInfo(token: string): void {
+    this.jwtService.saveToken(token);
+    this.router.navigate(['']);
+  }
+
   onSubmitAuth() {
     switch (this.authType) {
       case 'login':
         this.authService
           .loginService(this.email, this.password)
           .subscribe((data) => {
-            this.jwtService.saveToken(data.token);
-            this.router.navigate(['']);
+            this.setAuthInfo(data.token);
           });
         break;
       case 'signup':
         this.authService
           .signupService(this.email, this.password)
           .subscribe((data) => {
-            this.jwtService.saveToken(data.token);
+            this.setAuthInfo(data.token);
           });
         break;
       default:

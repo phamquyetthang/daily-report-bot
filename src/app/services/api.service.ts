@@ -8,26 +8,34 @@ import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class ApiService {
-  constructor(private http: HttpClient, private jwtService: JwtService) {
-    this.headers.set('x-auth-token', this.jwtService.getToken());
+  constructor(private http: HttpClient) {}
+
+  get headers(): HttpHeaders {
+    const config = new HttpHeaders({
+      Accept: 'application/json ',
+      'Content-Type': 'application/json',
+
+      'x-auth-token': '',
+    });
+    return config;
   }
 
   private formatErrors(error: any) {
-    console.log(
-      '🚀 ~ file: api.service.ts ~ line 16 ~ ApiService ~ formatErrors ~ error',
-      error
-    );
-    return throwError(error.error);
+    let errorMessage = 'Unknown error!';
+    if (error.error instanceof ErrorEvent) {
+      // Client-side errors
+      errorMessage = `Error: ${error.error.message}`;
+    } else {
+      // Server-side errors
+      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+    }
+    return throwError(errorMessage);
   }
 
-  private headers = new HttpHeaders({
-    Accept: 'application/json ',
-    'Content-Type': 'application/json',
-
-    'x-auth-token': '',
-  });
+  // private headers =
 
   get(path: string, params: HttpParams = new HttpParams()): Observable<any> {
+    console.log(this.headers);
     return this.http
       .get(`${environment.apiUrl}${path}`, { headers: this.headers, params })
       .pipe(catchError(this.formatErrors));
@@ -43,13 +51,9 @@ export class ApiService {
 
   post(path: string, body: Object = {}): Observable<any> {
     return this.http
-      .post(
-        `${environment.apiUrl}${path}`,
-        JSON.stringify(body),
-        {
-          headers: this.headers,
-        }
-      )
+      .post(`${environment.apiUrl}${path}`, JSON.stringify(body), {
+        headers: this.headers,
+      })
       .pipe(catchError(this.formatErrors));
   }
 

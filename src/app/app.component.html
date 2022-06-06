@@ -1,2 +1,4 @@
-<app-header> </app-header>
-<router-outlet></router-outlet>
+<div class="px-20 mx-auto xl:px-20">
+    <app-header *ngIf="jwtToken"></app-header>
+    <router-outlet></router-outlet>
+</div>
