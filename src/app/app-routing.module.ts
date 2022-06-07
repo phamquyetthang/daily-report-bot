@@ -6,7 +6,11 @@ import { ReportComponent } from './screens/report/report.component';
 
 const routes: Routes = [
   { path: 'auth/:type', component: AuthComponent },
-  { path: '', component: ReportComponent, canActivate: [AuthGuard] },
+  {
+    path: '',
+    component: ReportComponent,
+    canActivate: [AuthGuard],
+  },
 ];
 
 @NgModule({

@@ -39,6 +39,8 @@ export class ReportComponent implements OnInit {
   reportEdit: IReportForm = {
     ...initReportEdit,
   };
+
+  myId = '';
   editId: string = '';
 
   constructor(
@@ -51,6 +53,7 @@ export class ReportComponent implements OnInit {
   ngOnInit(): void {
     this.userService.isLoginId.subscribe((id: string) => {
       this.selectedId = id;
+      this.myId = id;
       this.reportService.getReportById();
     });
 

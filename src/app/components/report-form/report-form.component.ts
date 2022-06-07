@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import * as moment from 'moment';
 import { IReportForm } from 'src/app/utils/types/report';
 
 @Component({
@@ -40,5 +41,22 @@ export class ReportFormComponent implements OnInit {
       project: '',
       contain: '',
     });
+  }
+
+  get isShowDate() {
+    return (
+      (this.report.date && moment(this.report.date).isBefore(moment())) ||
+      (this.report.schedule && moment(this.report.schedule).isBefore(moment()))
+    );
+  }
+
+  get defaultScheduleTime(): string {
+    return this.report.schedule
+      ? moment(this.report.schedule).format()
+      : moment().add(1, 'day').startOf('D').add(8, 'hours').format();
+  }
+
+  updateSchedule(time: string) {
+    this.report.schedule = new Date(time);
   }
 }

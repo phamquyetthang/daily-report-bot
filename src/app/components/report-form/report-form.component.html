@@ -1,100 +1,175 @@
-<div *ngIf="isOpen"
-    class="overflow-x-hidden overflow-y-hidden fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center flex">
-    <div class="relative w-auto my-6 mx-auto ">
-        <div
-            class="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-            <div
-                class="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t sticky bg-white top-0">
-                <h3 class="text-3xl font-semibold">
-                    {{ report._id ? "Edit Report" : "Create Report" }}
-                </h3>
-            </div>
-            <div class="w-[70vw] p-6 max-h-[76vh] overflow-y-auto overflow-x-hidden">
-                <div class="border-b border-solid border-slate-200 mb-6">
-                    <h3 class="text-xl font-semibold mb-4">Done yesterday</h3>
-                    <div class=" border-dashed border-b border-slate-200 pb-2 mb-3 grid gap-4 grid-cols-4"
-                        *ngFor="let item of report.yesterday">
-                        <div class="">
-                            <label class="text-sm font-medium text-gray-900 dark:text-gray-300 block">Project:</label>
-                            <input type="text" [(ngModel)]="item.project"
-                                class="p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-                        </div>
-                        <div class="col-span-3">
-                            <label class="mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Content:</label>
-                            <textarea type="text" [(ngModel)]="item.contain"
-                                class="resize-y w-full p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
-                        </div>
-                    </div>
-                    <button class="bg-slate-300 py-1 px-2 mb-2 rounded" (click)="addFormYesterday()">
-                        <i>Add project</i>
-                    </button>
-                    <div class="mb-3 grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Re-open
-                                bugs:</label>
-                            <input type="text" [(ngModel)]="report.re_open_bug"
-                                class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Reason
-                                re-open:</label>
-                            <input type="text" [ngModel]="report.reason_bug"
-                                class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                        </div>
-                        <div>
-                            <label
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Highlight:</label>
-                            <textarea type="text" [(ngModel)]="report.highlight_yesterday"
-                                class="block w-full p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="border-b border-solid border-slate-200 mb-6">
-                    <h3 class="text-xl font-semibold mb-4">Plan</h3>
-                    <div class=" border-dashed border-b border-slate-200 pb-2 mb-3 grid gap-4 grid-cols-4"
-                        *ngFor="let item of report.today">
-                        <div class="">
-                            <label class="text-sm font-medium text-gray-900 dark:text-gray-300 block">Project:</label>
-                            <input type="text" [(ngModel)]="item.project"
-                                class="p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-                        </div>
-                        <div class="col-span-3">
-                            <label class="mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Content:</label>
-                            <textarea type="text" [(ngModel)]="item.contain"
-                                class="resize-y w-full p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
-                        </div>
-                    </div>
-                    <button class="bg-slate-300 py-1 px-2 mb-2 rounded">
-                        <i>Add project</i>
-                    </button>
-                    <div class="mb-3">
-                        <label
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Highlight:</label>
-                        <textarea type="text" [(ngModel)]="report.highlight_today"
-                            class="block w-full p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
-                    </div>
-                </div>
-                <div class="border-b border-solid border-slate-200 mb-6">
-                    <h3 class="text-xl font-semibold mb-4">Impediment</h3>
-                    <div class="mb-3">
-                        <textarea type="text" [ngModel]="report.impediment"
-                            class="block w-full p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
-                    </div>
-                </div>
-            </div>
-            <div
-                class="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b sticky bottom-0 bg-white">
-                <button
-                    class="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                    type="button" (click)="toggleModal()">
-                    Close
-                </button>
-                <button
-                    class="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                    type="button" (click)="toggleModal()">
-                    Save
-                </button>
-            </div>
+<div
+  *ngIf="isOpen"
+  class="overflow-x-hidden overflow-y-hidden fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center flex"
+>
+  <div class="relative w-auto my-6 mx-auto">
+    <div
+      class="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none"
+    >
+      <div
+        class="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t sticky bg-white top-0"
+      >
+        <h3 class="text-3xl font-semibold">
+          {{ report._id ? "Edit Report" : "Create Report" }}
+        </h3>
+        <div *ngIf="isShowDate; else elseBockSchedule">
+          {{ report.date | date }}
         </div>
+        <ng-template #elseBockSchedule>
+          <div>
+            <app-date-picker
+              [label]="'Schedule'"
+              [disable]="!!report._id"
+              [currentValue]="defaultScheduleTime"
+              (updateTimeEvent)="updateSchedule($event)"
+            ></app-date-picker>
+          </div>
+        </ng-template>
+      </div>
+      <div class="w-[70vw] p-6 max-h-[76vh] overflow-y-auto overflow-x-hidden">
+        <div class="border-b border-solid border-slate-200 mb-6">
+          <h3 class="text-xl font-semibold mb-4">Done yesterday</h3>
+          <div
+            class="border-dashed border-b border-slate-200 pb-2 mb-3 grid gap-4 grid-cols-4"
+            *ngFor="let item of report.yesterday"
+          >
+            <div class="">
+              <label
+                class="text-sm font-medium text-gray-900 dark:text-gray-300 block"
+                >Project:</label
+              >
+              <input
+                type="text"
+                [(ngModel)]="item.project"
+                class="p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              />
+            </div>
+            <div class="col-span-3">
+              <label
+                class="mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                >Content:</label
+              >
+              <textarea
+                type="text"
+                [(ngModel)]="item.contain"
+                class="resize-y w-full p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              ></textarea>
+            </div>
+          </div>
+          <button
+            class="bg-slate-300 py-1 px-2 mb-2 rounded"
+            (click)="addFormYesterday()"
+          >
+            <i>Add project</i>
+          </button>
+          <div class="mb-3 grid grid-cols-2 gap-4">
+            <div>
+              <label
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                >Re-open bugs:</label
+              >
+              <input
+                type="text"
+                [(ngModel)]="report.re_open_bug"
+                class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              />
+              <label
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                >Reason re-open:</label
+              >
+              <input
+                type="text"
+                [ngModel]="report.reason_bug"
+                class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              />
+            </div>
+            <div>
+              <label
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                >Highlight:</label
+              >
+              <textarea
+                type="text"
+                [(ngModel)]="report.highlight_yesterday"
+                class="block w-full p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="border-b border-solid border-slate-200 mb-6">
+          <h3 class="text-xl font-semibold mb-4">Plan</h3>
+          <div
+            class="border-dashed border-b border-slate-200 pb-2 mb-3 grid gap-4 grid-cols-4"
+            *ngFor="let item of report.today"
+          >
+            <div class="">
+              <label
+                class="text-sm font-medium text-gray-900 dark:text-gray-300 block"
+                >Project:</label
+              >
+              <input
+                type="text"
+                [(ngModel)]="item.project"
+                class="p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              />
+            </div>
+            <div class="col-span-3">
+              <label
+                class="mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                >Content:</label
+              >
+              <textarea
+                type="text"
+                [(ngModel)]="item.contain"
+                class="resize-y w-full p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              ></textarea>
+            </div>
+          </div>
+          <button class="bg-slate-300 py-1 px-2 mb-2 rounded">
+            <i>Add project</i>
+          </button>
+          <div class="mb-3">
+            <label
+              class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+              >Highlight:</label
+            >
+            <textarea
+              type="text"
+              [(ngModel)]="report.highlight_today"
+              class="block w-full p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            ></textarea>
+          </div>
+        </div>
+        <div class="border-b border-solid border-slate-200 mb-6">
+          <h3 class="text-xl font-semibold mb-4">Impediment</h3>
+          <div class="mb-3">
+            <textarea
+              type="text"
+              [ngModel]="report.impediment"
+              class="block w-full p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            ></textarea>
+          </div>
+        </div>
+      </div>
+      <div
+        class="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b sticky bottom-0 bg-white"
+      >
+        <button
+          class="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+          type="button"
+          (click)="toggleModal()"
+        >
+          Close
+        </button>
+        <button
+          class="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+          type="button"
+          (click)="toggleModal()"
+        >
+          Save
+        </button>
+      </div>
     </div>
+  </div>
 </div>
 <div *ngIf="isOpen" class="opacity-25 fixed inset-0 z-40 bg-black"></div>

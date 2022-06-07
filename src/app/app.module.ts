@@ -7,14 +7,22 @@ import { AuthComponent } from './screens/auth/auth.component';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CoreModule } from './services/index.module';
-import { ReportComponent } from './screens/report/report.component';
 import { AuthGuard } from './screens/auth/auth-guard.service';
 import { HeaderComponent } from './components/header/header.component';
 import { AuthInterceptor } from './helpers/auth.Interceptor';
 import { ErrorInterceptor } from './helpers/error.Interceptor';
+import { DatePickerComponent } from './components/date-picker/date-picker.component';
+import { ReportComponent } from './screens/report/report.component';
 import { ReportFormComponent } from './components/report-form/report-form.component';
 @NgModule({
-  declarations: [AppComponent, AuthComponent, ReportComponent, HeaderComponent, ReportFormComponent],
+  declarations: [
+    AppComponent,
+    AuthComponent,
+    HeaderComponent,
+    DatePickerComponent,
+    ReportComponent,
+    ReportFormComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,

@@ -1,15 +1,22 @@
 <div class="border-b border-gray-200 dark:border-gray-700 mt-6">
-  <ul class="flex flex-wrap -mb-px text-sm font-medium text-center text-gray-500 dark:text-gray-400">
+  <ul
+    class="flex flex-wrap -mb-px text-sm font-medium text-center text-gray-500 dark:text-gray-400"
+  >
     <li class="mr-2" *ngFor="let user of users">
-      <button *ngIf="user._id === selectedId; else elseBlock" (click)="onSelect(user._id)"
+      <button
+        *ngIf="user._id === selectedId; else elseBlock"
+        (click)="onSelect(user._id)"
         class="inline-flex p-4 text-blue-600 rounded-t-lg border-b-2 border-blue-600 items-center active dark:text-blue-500 dark:border-blue-500 group"
-        aria-current="page">
+        aria-current="page"
+      >
         <img class="w-8 h-8 rounded-full" [src]="user.avt" alt="Avatar" />
         <span class="ml-2">{{ user.name }}</span>
       </button>
       <ng-template #elseBlock>
-        <button (click)="onSelect(user._id)"
-          class="inline-flex p-4 rounded-t-lg border-b-2 border-transparent items-center hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group">
+        <button
+          (click)="onSelect(user._id)"
+          class="inline-flex p-4 rounded-t-lg border-b-2 border-transparent items-center hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group"
+        >
           <img class="w-8 h-8 rounded-full" [src]="user.avt" alt="Avatar" />
           <span class="ml-2">{{ user.name }}</span>
         </button>
@@ -19,36 +26,50 @@
 
   <div class="bg-gray-100 text-gray-700 font-sans quicksand pt-2">
     <div class="w-screen overflow-auto whitespace-no-wrap text-center mt-2">
-      <button class="inline-block border border-teal-500 text-teal-500 rounded px-3 py-1 mr-4"
-        *ngFor="let day of days()">
+      <button
+        class="inline-block border border-teal-500 text-teal-500 rounded px-3 py-1 mr-4"
+        *ngFor="let day of days()"
+      >
         {{ day }}
       </button>
     </div>
     <div class="w-screen text-center mt-2">
       <button
         class="bg-pink-500 text-white active:bg-pink-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-        type="button" (click)="toggleModal()">
+        type="button"
+        (click)="toggleModal()"
+        *ngIf="selectedId === myId"
+      >
         Create daily report
       </button>
     </div>
-    <div class="p-16 pt-0 grid md:grid-cols-2 sm:grid-cols-1 lg:grid-cols-3 m-5 mb-10">
+    <div
+      class="p-16 pt-0 grid md:grid-cols-2 sm:grid-cols-1 lg:grid-cols-3 m-5 mb-10"
+    >
       <div *ngFor="let report of reports">
-        <div *ngIf="getDateType(report.date) as variable"
-          class="bg-white hover:bg-green-100 border border-gray-200 p-3 m-1 relative" [ngClass]="{
+        <div
+          *ngIf="getDateType(report.date) as variable"
+          class="bg-white hover:bg-green-100 border border-gray-200 p-3 m-1 relative"
+          [ngClass]="{
             'border-blue-500': variable === 1,
             'border-yellow-500': variable === 2
-          }">
+          }"
+        >
           <i *ngIf="variable === 2" class="schedule-tag">schedule</i>
 
           <div class="m-2 text-justify text-sm">
             <p class="text-right text-xs">{{ report.date | date }}</p>
             <h2 class="font-bold text-lg h-2 mb-6">Done Yesterday</h2>
-            <div class="text-xs mb-1" *ngFor="let yesterday of report.yesterday">
+            <div
+              class="text-xs mb-1"
+              *ngFor="let yesterday of report.yesterday"
+            >
               <h3 class="font-bold text-sm">{{ yesterday.project }}:</h3>
               <p>{{ yesterday.contain }}</p>
             </div>
             <p *ngIf="report.re_open_bug">
-              🐞 <i><b>Re-open bug</b></i>: {{ report.re_open_bug }}
+              🐞 <i><b>Re-open bug</b></i
+              >: {{ report.re_open_bug }}
               <br />
               <span> <i>Reason</i>: {{ report.reason_bug }}</span>
             </p>
@@ -67,8 +88,14 @@
               ⚡ <i><b>Highlight :</b></i> {{ report.highlight_today }}
             </p>
           </div>
-          <div class="w-full text-right mt-4" *ngIf="variable !== 3">
-            <button class="text-green-400 uppercase font-bold text-sm" (click)="toggleModal(report)">
+          <div
+            class="w-full text-right mt-4"
+            *ngIf="variable !== 3 && selectedId === myId"
+          >
+            <button
+              class="text-green-400 uppercase font-bold text-sm"
+              (click)="toggleModal(report)"
+            >
               Edit
             </button>
           </div>
@@ -78,4 +105,9 @@
   </div>
 </div>
 
-<app-report-form [isOpen]="isOpenAddEdit" (closeEvent)="toggleModal()"  [report]="reportEdit"></app-report-form>
+<app-report-form
+  [isOpen]="isOpenAddEdit"
+  (closeEvent)="toggleModal()"
+  [report]="reportEdit"
+>
+</app-report-form>

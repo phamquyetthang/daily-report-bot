@@ -19,4 +19,6 @@ export default interface IReport {
   schedule?: Date;
 }
 
-export type IReportForm = Omit<IReport, 'date' | 'createdAt' | 'updatedAt' | 'user'>
+export type IReportForm = Omit<IReport, 'date' | 'createdAt' | 'updatedAt' | 'user'> & {
+  date ?: Date
+}
